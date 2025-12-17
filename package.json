@@ -1,6 +1,6 @@
 {
   "name": "@hanzo/mdx",
-  "version": "14.1.1",
+  "version": "14.2.0",
   "description": "MDX processing library for Hanzo",
   "keywords": [
     "Hanzo",
@@ -30,6 +30,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./components": {
+      "import": "./dist/components.js",
+      "types": "./dist/components.d.ts"
     },
     "./runtime/*": {
       "import": "./dist/runtime/*.js",
@@ -69,9 +73,9 @@
   },
   "dependencies": {
     "@mdx-js/mdx": "^3.1.1",
-    "@standard-schema/spec": "^1.0.0",
+    "@standard-schema/spec": "^1.1.0",
     "chokidar": "^5.0.0",
-    "esbuild": "^0.27.1",
+    "esbuild": "^0.27.2",
     "estree-util-value-to-estree": "^3.5.0",
     "js-yaml": "^4.1.1",
     "mdast-util-to-markdown": "^2.1.2",
@@ -84,7 +88,7 @@
     "unist-util-remove-position": "^5.0.0",
     "unist-util-visit": "^5.0.0",
     "vfile": "^6.0.3",
-    "zod": "^4.1.13"
+    "zod": "^4.2.1"
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
@@ -94,7 +98,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/mdast": "^4.0.4",
     "@types/mdx": "^2.0.13",
-    "@types/node": "^24.10.2",
+    "@types/node": "^24.10.4",
     "@types/picomatch": "^4.0.2",
     "@types/react": "^19.2.7",
     "mdast-util-directive": "^3.1.0",
@@ -107,8 +111,8 @@
     "rimraf": "^6.1.2",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "vite": "^7.2.7",
-    "webpack": "^5.103.0"
+    "vite": "^7.3.0",
+    "webpack": "^5.104.0"
   },
   "peerDependencies": {
     "@hanzo/ui": "^5.0.0",
