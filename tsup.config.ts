@@ -1,10 +1,12 @@
 import { defineConfig } from 'tsup';
 
-const external = ['next', 'typescript', 'bun', /^@hanzo\/docs\//];
-
-const noExternal = [
-  // TODO: remove this when the min `@hanzo/docs-core` version is above 16.2.3
-  '@hanzo/docs-core/source/schema',
+const external = [
+  'next',
+  'typescript',
+  'bun',
+  /^@hanzo\/docs/,
+  '@hanzo/docs-core',
+  '@hanzo/docs-mdx-remote',
 ];
 
 export default defineConfig([
@@ -18,7 +20,6 @@ export default defineConfig([
       './src/plugins/*.ts',
     ],
     format: 'esm',
-    noExternal,
     external,
     dts: true,
     target: 'node22',
@@ -30,7 +31,6 @@ export default defineConfig([
       './next/index': './src/next/index.ts',
     },
     format: 'cjs',
-    noExternal,
     external,
     dts: false,
     target: 'node22',
