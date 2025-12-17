@@ -1,14 +1,24 @@
 {
-  "extends": "tsconfig/base.json",
   "compilerOptions": {
+    "target": "ES2020",
+    "lib": ["ESNext"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["remark-stringify", "@types/node"],
-    "noEmit": true,
-    "lib": ["ESNext"],
-    "module": "ESNext",
-    "target": "ES2020"
+    "types": ["remark-stringify", "@types/node"]
   },
-  "exclude": ["node_modules", "eslint.config.mjs"]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "dist", "eslint.config.mjs"]
 }
