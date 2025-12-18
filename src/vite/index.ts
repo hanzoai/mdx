@@ -9,7 +9,7 @@ import { createIntegratedConfigLoader } from '@/loaders/config';
 import { createMetaLoader } from '@/loaders/meta';
 import indexFile, { IndexFilePluginOptions } from '@/plugins/index-file';
 
-const DocsDeps = ['@hanzo/docs/core', '@hanzo/docs/ui', '@hanzo/docs/openapi'];
+const DocsDeps = ['@hanzo/docs', '@hanzo/docs/ui', '@hanzo/docs/openapi'];
 
 export interface PluginOptions {
   /**
