@@ -9,7 +9,7 @@ import { createIntegratedConfigLoader } from '@/loaders/config';
 import { createMetaLoader } from '@/loaders/meta';
 import indexFile, { IndexFilePluginOptions } from '@/plugins/index-file';
 
-const FumadocsDeps = ['@hanzo/docs-core', '@hanzo/docs-ui', '@hanzo/docs-openapi'];
+const HanzoDeps = ['@hanzo/docs/core', '@hanzo/docs/ui', '@hanzo/docs/openapi'];
 
 export interface PluginOptions {
   /**
@@ -59,7 +59,7 @@ export default async function mdx(
   );
 
   return {
-    name: '@hanzo/docs-mdx',
+    name: '@hanzo/mdx',
     // needed, otherwise other plugins will be executed before our `transform`.
     enforce: 'pre',
     config(config) {
@@ -67,11 +67,11 @@ export default async function mdx(
 
       return mergeConfig(config, {
         optimizeDeps: {
-          exclude: FumadocsDeps,
+          exclude: HanzoDeps,
         },
         resolve: {
-          noExternal: FumadocsDeps,
-          dedupe: FumadocsDeps,
+          noExternal: HanzoDeps,
+          dedupe: HanzoDeps,
         },
       } satisfies UserConfig);
     },
