@@ -76,7 +76,7 @@ export default function indexFile(
   } {
     const serverOptions: ServerOptions = {};
     const typeConfigs: string[] = [
-      'import("@hanzo/docs-mdx/runtime/types").InternalTypeConfig',
+      'import("@hanzo/mdx/runtime/types").InternalTypeConfig',
     ];
     const ctx = core.getPluginContext();
 
