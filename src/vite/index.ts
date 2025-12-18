@@ -9,7 +9,7 @@ import { createIntegratedConfigLoader } from '@/loaders/config';
 import { createMetaLoader } from '@/loaders/meta';
 import indexFile, { IndexFilePluginOptions } from '@/plugins/index-file';
 
-const HanzoDeps = ['@hanzo/docs/core', '@hanzo/docs/ui', '@hanzo/docs/openapi'];
+const DocsDeps = ['@hanzo/docs/core', '@hanzo/docs/ui', '@hanzo/docs/openapi'];
 
 export interface PluginOptions {
   /**
@@ -67,11 +67,11 @@ export default async function mdx(
 
       return mergeConfig(config, {
         optimizeDeps: {
-          exclude: HanzoDeps,
+          exclude: DocsDeps,
         },
         resolve: {
-          noExternal: HanzoDeps,
-          dedupe: HanzoDeps,
+          noExternal: DocsDeps,
+          dedupe: DocsDeps,
         },
       } satisfies UserConfig);
     },
