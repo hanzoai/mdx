@@ -69,9 +69,9 @@ importers:
       '@hanzo/docs-core':
         specifier: 16.2.6
         version: 16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
-      '@hanzo/mdx-remote':
-        specifier: ^1.4.4
-        version: 1.4.4(@hanzo/docs-core@16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(@types/react@19.2.7)(react@19.2.3)
+      '@hanzo/mdx-runtime':
+        specifier: ^1.5.0
+        version: 1.5.1(@hanzo/docs-core@16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(@types/react@19.2.7)(react@19.2.3)
       '@types/bun':
         specifier: ^1.3.4
         version: 1.3.4
@@ -440,8 +440,8 @@ packages:
       zod:
         optional: true
 
-  '@hanzo/mdx-remote@1.4.4':
-    resolution: {integrity: sha512-pDHCLH+rlz86v7DNwdwtYytq8LyvjPajpi+Hr0WKVJsnbWVYpWfMDSlzjlbGJ7AIfewhu+fNIb/RI/RyJMdZug==}
+  '@hanzo/mdx-runtime@1.5.1':
+    resolution: {integrity: sha512-76b8FnaxoEB9g6P6ZTj3FmHMLVUb29JAMU4x/508BqJhk6MEr3xv6837+w6q3IsTWw6CNnl2huNva7GutIotkA==}
     peerDependencies:
       '@hanzo/docs-core': ^15.0.0 || ^16.0.0
       '@types/react': '*'
@@ -4071,7 +4071,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@hanzo/mdx-remote@1.4.4(@hanzo/docs-core@16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(@types/react@19.2.7)(react@19.2.3)':
+  '@hanzo/mdx-runtime@1.5.1(@hanzo/docs-core@16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1))(@types/react@19.2.7)(react@19.2.3)':
     dependencies:
       '@hanzo/docs-core': 16.2.6(@types/react@19.2.7)(lucide-react@0.456.0(react@19.2.3))(next@16.0.10(react-dom@19.2.3(react@19.2.3))(react@19.2.3))(react-dom@19.2.3(react@19.2.3))(react@19.2.3)(zod@4.2.1)
       '@mdx-js/mdx': 3.1.1
