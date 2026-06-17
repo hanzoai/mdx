@@ -1,4 +1,4 @@
-# LLM.md - Hanzo Mdx
+# Hanzo Mdx
 
 ## Overview
 MDX processing library for Hanzo
