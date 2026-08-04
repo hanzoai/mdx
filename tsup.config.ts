@@ -5,7 +5,6 @@ const external = [
   'typescript',
   'bun',
   /^@hanzo\/docs/,
-  /^@hanzo\/ui/,
   '@hanzo/docs-core',
   '@hanzo/mdx-runtime',
 ];
@@ -13,7 +12,7 @@ const external = [
 export default defineConfig([
   {
     entry: [
-      './src/{index,bin,components}.ts',
+      './src/{index,bin}.ts',
       './src/{config,next,vite,bun}/index.ts',
       './src/webpack/{mdx,meta}.ts',
       './src/node/loader.ts',

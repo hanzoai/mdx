@@ -4,16 +4,16 @@ import * as __fd_glob_3 from "./generate-index/folder/test.mdx?collection=blogs"
 import * as __fd_glob_2 from "./generate-index/index.mdx?collection=blogs"
 import * as __fd_glob_1 from "./generate-index/folder/test.mdx?collection=docs"
 import * as __fd_glob_0 from "./generate-index/index.mdx?collection=docs"
-import { server } from 'fumadocs-mdx/runtime/server';
+import { server } from '@hanzo/mdx/runtime/server';
 import type * as Config from './config';
 
-const create = server<typeof Config, import("fumadocs-mdx/runtime/types").InternalTypeConfig & {
+const create = server<typeof Config, import("@hanzo/mdx/runtime/types").InternalTypeConfig & {
   DocData: {
     blogs: {
       /**
        * extracted references (e.g. hrefs, paths), useful for analyzing relationships between pages.
        */
-      extractedReferences: import("fumadocs-mdx").ExtractedReference[];
+      extractedReferences: import("@hanzo/mdx").ExtractedReference[];
     },
   }
 } & {
@@ -35,23 +35,23 @@ const create = server<typeof Config, import("fumadocs-mdx/runtime/types").Intern
   }
 }>({"doc":{"passthroughs":["extractedReferences","lastModified"]}});
 
-export const docs = await create.doc("docs", "packages/mdx/test/fixtures/generate-index", {"index.mdx": __fd_glob_0, "folder/test.mdx": __fd_glob_1, });
+export const docs = await create.doc("docs", "test/fixtures/generate-index", {"index.mdx": __fd_glob_0, "folder/test.mdx": __fd_glob_1, });
 
-export const blogs = await create.doc("blogs", "packages/mdx/test/fixtures/generate-index", {"index.mdx": __fd_glob_2, "folder/test.mdx": __fd_glob_3, });
+export const blogs = await create.doc("blogs", "test/fixtures/generate-index", {"index.mdx": __fd_glob_2, "folder/test.mdx": __fd_glob_3, });
 ```
 
 ```ts title="dynamic.ts"
 // @ts-nocheck
-import { dynamic } from 'fumadocs-mdx/runtime/dynamic';
+import { dynamic } from '@hanzo/mdx/runtime/dynamic';
 import * as Config from './config';
 
-const create = await dynamic<typeof Config, import("fumadocs-mdx/runtime/types").InternalTypeConfig & {
+const create = await dynamic<typeof Config, import("@hanzo/mdx/runtime/types").InternalTypeConfig & {
   DocData: {
     blogs: {
       /**
        * extracted references (e.g. hrefs, paths), useful for analyzing relationships between pages.
        */
-      extractedReferences: import("fumadocs-mdx").ExtractedReference[];
+      extractedReferences: import("@hanzo/mdx").ExtractedReference[];
     },
   }
 } & {
@@ -71,21 +71,21 @@ const create = await dynamic<typeof Config, import("fumadocs-mdx/runtime/types")
       lastModified?: Date;
     },
   }
-}>(Config, {"configPath":"packages/mdx/test/fixtures/config.ts","environment":"test","outDir":"packages/mdx/test/fixtures"}, {"doc":{"passthroughs":["extractedReferences","lastModified"]}});
+}>(Config, {"configPath":"test/fixtures/config.ts","environment":"test","outDir":"test/fixtures"}, {"doc":{"passthroughs":["extractedReferences","lastModified"]}});
 ```
 
 ```ts title="browser.ts"
 // @ts-nocheck
-import { browser } from 'fumadocs-mdx/runtime/browser';
+import { browser } from '@hanzo/mdx/runtime/browser';
 import type * as Config from './config';
 
-const create = browser<typeof Config, import("fumadocs-mdx/runtime/types").InternalTypeConfig & {
+const create = browser<typeof Config, import("@hanzo/mdx/runtime/types").InternalTypeConfig & {
   DocData: {
     blogs: {
       /**
        * extracted references (e.g. hrefs, paths), useful for analyzing relationships between pages.
        */
-      extractedReferences: import("fumadocs-mdx").ExtractedReference[];
+      extractedReferences: import("@hanzo/mdx").ExtractedReference[];
     },
   }
 } & {

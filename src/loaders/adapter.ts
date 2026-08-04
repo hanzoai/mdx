@@ -2,8 +2,11 @@ import type { CompilerOptions } from '@/loaders/mdx/build-mdx';
 import type { LoadFnOutput, LoadHook } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs/promises';
-import type { SourceMap, TransformPluginContext } from 'rollup';
-import type { TransformResult } from 'vite';
+import type {
+  SourceMapInput,
+  TransformPluginContext,
+  TransformResult,
+} from 'rollup';
 import { parse } from 'node:querystring';
 import { ValidationError } from '@/utils/validation';
 import path from 'node:path';
@@ -118,7 +121,7 @@ export function toVite(loader: Loader): ViteLoader {
       if (result === null) return null;
       return {
         code: result.code,
-        map: result.map as SourceMap,
+        map: result.map as SourceMapInput,
       };
     },
   };

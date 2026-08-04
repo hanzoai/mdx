@@ -41,7 +41,7 @@ function pluginOption(
 }
 
 export type MDXPresetOptions =
-  | ({ preset?: 'fumadocs' } & DefaultMDXOptions)
+  | ({ preset?: 'hanzo' } & DefaultMDXOptions)
   | ({
       preset: 'minimal';
     } & ProcessorOptions);

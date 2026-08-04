@@ -1,6 +1,6 @@
 {
   "name": "@hanzo/mdx",
-  "version": "14.2.5",
+  "version": "14.2.6",
   "description": "MDX processing library for Hanzo",
   "keywords": [
     "Hanzo",
@@ -30,10 +30,6 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
-    },
-    "./components": {
-      "import": "./dist/components.js",
-      "types": "./dist/components.d.ts"
     },
     "./runtime/*": {
       "import": "./dist/runtime/*.js",
@@ -68,11 +64,12 @@
     "dev": "tsup --watch",
     "lint": "eslint .",
     "test": "vitest run",
-    "types:check": "tsgo --noEmit",
+    "types:check": "tsc --noEmit",
     "release": "pnpm run build && changeset publish",
     "version": "changeset version && pnpm install --lockfile-only"
   },
   "dependencies": {
+    "@hanzo/mdx-runtime": "^1.6.1",
     "@mdx-js/mdx": "^3.1.1",
     "@standard-schema/spec": "^1.1.0",
     "chokidar": "^5.0.0",
@@ -83,7 +80,6 @@
     "picocolors": "^1.1.1",
     "picomatch": "^4.0.3",
     "remark-mdx": "^3.1.1",
-    "@hanzo/mdx-runtime": "^1.6.1",
     "tinyexec": "^1.0.2",
     "tinyglobby": "^0.2.15",
     "unified": "^11.0.5",
@@ -113,7 +109,6 @@
     "rollup": "^4.60.0",
     "tsup": "^8.5.1",
     "typescript": "^5.9.3",
-    "@typescript/native-preview": "^7.0.0-dev.20260707.2",
     "vite": "^7.3.0",
     "vitest": "^4.0.18",
     "webpack": "^5.104.0"
