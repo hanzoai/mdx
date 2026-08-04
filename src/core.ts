@@ -53,7 +53,7 @@ export interface Plugin extends IndexFilePlugin {
   emit?: (this: PluginContext) => Awaitable<EmitEntry[]>;
 
   /**
-   * Configure Fumadocs dev server
+   * Configure the docs dev server
    */
   configureServer?: (
     this: PluginContext,

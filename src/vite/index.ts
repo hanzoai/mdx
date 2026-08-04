@@ -9,7 +9,21 @@ import { createIntegratedConfigLoader } from '@/loaders/config';
 import { createMetaLoader } from '@/loaders/meta';
 import indexFile, { IndexFilePluginOptions } from '@/plugins/index-file';
 
-const DocsDeps = ['@hanzo/docs', '@hanzo/ui', '@hanzo/docs/openapi'];
+/**
+ * Docs packages the consumer app renders content with. They are left out of
+ * dependency pre-bundling and kept in the Vite pipeline, and must resolve to a
+ * single instance: `@hanzo/docs-core` holds the source/TOC context the
+ * generated `.source` index binds to.
+ */
+const DocsDeps = ['@hanzo/docs-core', '@hanzo/docs-openapi', '@hanzo/ui'];
+
+/**
+ * The 8.x component layer underneath `@hanzo/ui`. Two copies of the
+ * `@hanzogui/*` core mean two style contexts, which renders unstyled output, so
+ * these are deduped and bundled for SSR — but *not* added to
+ * `optimizeDeps.exclude`: the core has to stay pre-bundled as one unit.
+ */
+const GuiDeps = ['@hanzo/gui', '@hanzogui/core', '@hanzogui/web'];
 
 export interface PluginOptions {
   /**
@@ -25,7 +39,7 @@ export interface PluginOptions {
   configPath?: string;
 
   /**
-   * Update Vite config to fix module resolution of Fumadocs
+   * Update Vite config to fix module resolution of the docs packages
    *
    * @defaultValue true
    */
@@ -70,8 +84,8 @@ export default async function mdx(
           exclude: DocsDeps,
         },
         resolve: {
-          noExternal: DocsDeps,
-          dedupe: DocsDeps,
+          noExternal: [...DocsDeps, ...GuiDeps],
+          dedupe: [...DocsDeps, ...GuiDeps],
         },
       } satisfies UserConfig);
     },

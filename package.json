@@ -115,7 +115,6 @@
   },
   "peerDependencies": {
     "@hanzo/docs-core": "^16.9.0",
-    "@hanzo/ui": "^8.0.0",
     "next": "^15.3.0 || ^16.0.0",
     "react": "*",
     "vite": "6.x.x || 7.x.x"
@@ -128,9 +127,6 @@
       "optional": true
     },
     "vite": {
-      "optional": true
-    },
-    "@hanzo/ui": {
       "optional": true
     }
   },
