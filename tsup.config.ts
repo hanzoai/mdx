@@ -7,7 +7,7 @@ const external = [
   /^@hanzo\/docs/,
   /^@hanzo\/ui/,
   '@hanzo/docs-core',
-  '@hanzo/docs-mdx-remote',
+  '@hanzo/mdx-runtime',
 ];
 
 export default defineConfig([
