@@ -1,4 +1,4 @@
-# next-docs-mdx
+# @hanzo/mdx
 
 ## 14.1.1
 
