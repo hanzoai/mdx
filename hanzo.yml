@@ -1,0 +1,19 @@
+# Canonical CI/CD config for hanzoai/mdx — read by the hanzoai/ci reusable
+# (.hanzo/workflows/cicd.yml) and by platform.hanzo.ai.
+#
+# No `images:`: this is an npm library, not a service.
+#
+# The repo had no gate at all — .github/workflows held only the changesets
+# release lane, so `vitest run` and `tsc --noEmit` were declared in package.json
+# and never run by anything. They run now, on every push and pull request.
+test:
+  - name: lint and types
+    run: |
+      set -euo pipefail
+      pnpm install --frozen-lockfile
+      pnpm run lint
+      pnpm run types:check
+  - name: unit
+    run: |
+      set -euo pipefail
+      pnpm run test
