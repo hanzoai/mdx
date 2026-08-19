@@ -1,0 +1,150 @@
+name: Publish
+
+# The one thing here allowed to reach a registry.
+#
+# npmjs serves @hanzo/mdx 14.2.5 and the tree carries 14.2.6, because nothing
+# in this repo could ever have shipped it. The changesets job it inherited sat
+# in `.github/workflows`, which the forge does not read, and asked for
+# `ubuntu-latest`, a hosted runner this fleet does not have — so it never ran,
+# on any push, in the repo's history. It also asked the forge for an npm token
+# directly, and an absent secret interpolates to the empty string rather than
+# failing, so even a run that started would have reached npmjs unauthenticated.
+#
+# Retiring it stated the gap plainly: with no npm credential on the forge,
+# publishing was a manual `pnpm run release`. KMS answers that. The credential
+# is read at publish time by the same machine identity every other workflow
+# here already uses, so nothing new is stored on the forge and nothing extra
+# has to be rotated.
+#
+# Changesets also solved a problem this repo no longer has. It exists to decide
+# what the next version should be; package.json already says. What is missing
+# is the publish.
+#
+# cicd.yml runs lint, types and the suite through the shared pipeline, and this
+# job still builds and tests before it publishes. That is not the same gate
+# twice: a sibling workflow's green is not a fact this job can read, and dist/
+# is gitignored, so this job has to build the thing it is about to upload
+# regardless.
+#
+# No `paths:` filter, deliberately. The question is "does npmjs serve something
+# older than this tree?", and the comparison below is the only thing that reads
+# the truth. A path gate guesses it from the shape of a diff, so a lockfile-only
+# fix to a failed release matches no path and cannot re-run the job it repaired.
+# With no gate this is idempotent by construction, which is also what makes the
+# manual dispatch safe.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Serialized, newest wins. Two runs in flight both read the registry before
+# either writes to it, so both believe the same version is unpublished and the
+# slower one ships a stale tree under a number the faster one already defined.
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
+jobs:
+  publish:
+    # Must name a label a runner actually advertises. A label nothing offers
+    # does not fail — it queues until the 24h timeout, which reads as silence
+    # rather than as an error.
+    runs-on: hanzo-build-linux-amd64
+    env:
+      # One variable covers install, publish and the read-back, so a runner-level
+      # .npmrc pointing at the fleet mirror cannot send the publish somewhere the
+      # ratchet never asked about.
+      npm_config_registry: https://registry.npmjs.org
+    steps:
+      - uses: actions/checkout@v4
+
+      # Reads the pnpm version off package.json's `packageManager`, so the pin
+      # stays in one place.
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          # tsup builds for node22; the runtime that gates it should be the one
+          # the output claims to run on.
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+
+      - run: pnpm install --frozen-lockfile
+
+      # dist/ is gitignored, and `files` names dist/*, so without this the
+      # tarball is two loader shims and nothing else. The build is not an
+      # optimization here — it is the package.
+      - run: pnpm run build
+
+      # vitest, and it runs on every push rather than only a releasing one: a
+      # regression that surfaces on release day surfaces on the day it is most
+      # expensive, against a version number that is already immutable.
+      - run: pnpm test
+
+      - name: Is the tree ahead of the registry
+        id: ahead
+        run: |
+          set -euo pipefail
+          NAME=$(jq -r .name package.json)
+          NEW=$(jq -r .version package.json)
+          # A name npmjs has never served answers 404, which is "0.0.0" and not
+          # an error. Without the guard the pipeline's exit status is jq's, and
+          # jq exits 0 on empty input.
+          OLD=$(curl -sf "https://registry.npmjs.org/${NAME/\//%2f}" \
+                  | jq -r '."dist-tags".latest' 2>/dev/null || true)
+          [ -n "$OLD" ] && [ "$OLD" != null ] || OLD=0.0.0
+
+          # FORWARD ONLY. `!=` fires in both directions and a revert would walk
+          # the registry backwards; only a strictly greater local version is a
+          # release. Asking the registry rather than the previous commit also
+          # survives a merge whose first parent already carries the bump.
+          NEWEST=$(printf '%s\n%s\n' "$OLD" "$NEW" | sort -V | tail -1)
+          if [ "$OLD" = "$NEW" ] || [ "$NEWEST" != "$NEW" ]; then
+            echo "registry serves $OLD; tree is $NEW — nothing to publish."
+            echo "yes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "registry serves $OLD; tree is $NEW — publishing."
+            echo "yes=true" >> "$GITHUB_OUTPUT"
+            echo "old=$OLD" >> "$GITHUB_OUTPUT"
+            echo "new=$NEW" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Load the publish credential from KMS
+        if: steps.ahead.outputs.yes == 'true'
+        env:
+          KMS_CLIENT_ID: ${{ secrets.KMS_CLIENT_ID }}
+          KMS_CLIENT_SECRET: ${{ secrets.KMS_CLIENT_SECRET }}
+        run: |
+          # Only the KMS machine identity lives as a forge secret; a raw
+          # NPM_TOKEN beside it would be a second place to hold one thing —
+          # and the one that rots silently, since npm answers an unauthorised
+          # publish with 404 on PUT, not 401.
+          if [ -z "$KMS_CLIENT_ID" ] || [ -z "$KMS_CLIENT_SECRET" ]; then
+            echo "::error::KMS machine identity absent — cannot pull the npm credential. Seed KMS_CLIENT_ID/KMS_CLIENT_SECRET as git.hanzo.ai Actions secrets (org or repo scope)." >&2
+            exit 1
+          fi
+          KMS=https://kms.hanzo.ai; ENVN=prod
+          TOKEN=$(curl -sf "$KMS/v1/kms/auth/login" -H 'Content-Type: application/json' \
+            -d "{\"clientId\":\"$KMS_CLIENT_ID\",\"clientSecret\":\"$KMS_CLIENT_SECRET\"}" | jq -r .accessToken)
+          [ -n "$TOKEN" ] && [ "$TOKEN" != null ] || { echo "::error::KMS login failed"; exit 1; }
+          # The org is the token's owner claim, not a path segment, so the read
+          # names only the secret: /v1/kms/secrets/<name>?env=<env>.
+          URL="$KMS/v1/kms/secrets/NPM_TOKEN?env=$ENVN"
+          # No -f: under `bash -e -o pipefail` a `curl -sf` on a 404 exits 22
+          # and kills the step before any message of ours prints, which reads
+          # like a broken network. Capture the status and say it.
+          BODY=$(curl -s -w '\n%{http_code}' "$URL" -H "Authorization: Bearer $TOKEN") || true
+          CODE=$(printf '%s' "$BODY" | tail -1)
+          VAL=$(printf '%s' "$BODY" | sed '$d' | jq -r '.value // empty' 2>/dev/null || true)
+          if [ -z "$VAL" ]; then
+            echo "::error::KMS returned HTTP $CODE for $URL with no value — seed NPM_TOKEN there, not as a forge secret." >&2
+            exit 1
+          fi
+          echo "::add-mask::$VAL"
+          echo "NODE_AUTH_TOKEN=$VAL" >> "$GITHUB_ENV"
+
+      - name: Publish
+        if: steps.ahead.outputs.yes == 'true'
+        run: |
+          echo "Publishing ${{ steps.ahead.outputs.old }} -> ${{ steps.ahead.outputs.new }}"
+          npm publish --access public

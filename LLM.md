@@ -37,8 +37,8 @@ nothing when only part of the stack is present.
 `eslint-config-custom/library.js`, a workspace-only package from the monorepo
 this was extracted from, and `eslint` itself is not a devDependency. The npm
 package of that name is an unrelated 0.0.0 placeholder -- do not install it to
-make the import resolve. CI (`.github/workflows/release.yml`) runs install +
-build only, so this does not gate anything; fixing it means choosing a real
+make the import resolve. `hanzo.yml` now runs `pnpm run lint` on every push, so
+the gap fails a lane instead of hiding in one; fixing it means choosing a real
 config, not restoring the old import.
 
 ## Build & Run
