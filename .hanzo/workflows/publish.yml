@@ -137,7 +137,7 @@ jobs:
           CODE=$(printf '%s' "$BODY" | tail -1)
           VAL=$(printf '%s' "$BODY" | sed '$d' | jq -r '.value // empty' 2>/dev/null || true)
           if [ -z "$VAL" ]; then
-            echo "::error::KMS returned HTTP $CODE for $URL with no value — seed NPM_TOKEN there, not as a forge secret." >&2
+            echo "::error::KMS returned HTTP $CODE for $URL with no value — seed NPM_TOKEN there, not as Hanzo Git secret." >&2
             exit 1
           fi
           echo "::add-mask::$VAL"
