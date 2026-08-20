@@ -4,16 +4,16 @@ name: Publish
 #
 # npmjs serves @hanzo/mdx 14.2.5 and the tree carries 14.2.6, because nothing
 # in this repo could ever have shipped it. The changesets job it inherited sat
-# in `.github/workflows`, which the forge does not read, and asked for
+# in `.github/workflows`, which Hanzo Git does not read, and asked for
 # `ubuntu-latest`, a hosted runner this fleet does not have — so it never ran,
-# on any push, in the repo's history. It also asked the forge for an npm token
+# on any push, in the repo's history. It also asked Hanzo Git for an npm token
 # directly, and an absent secret interpolates to the empty string rather than
 # failing, so even a run that started would have reached npmjs unauthenticated.
 #
-# Retiring it stated the gap plainly: with no npm credential on the forge,
+# Retiring it stated the gap plainly: with no npm credential on Hanzo Git,
 # publishing was a manual `pnpm run release`. KMS answers that. The credential
 # is read at publish time by the same machine identity every other workflow
-# here already uses, so nothing new is stored on the forge and nothing extra
+# here already uses, so nothing new is stored on Hanzo Git and nothing extra
 # has to be rotated.
 #
 # Changesets also solved a problem this repo no longer has. It exists to decide
@@ -115,7 +115,7 @@ jobs:
           KMS_CLIENT_ID: ${{ secrets.KMS_CLIENT_ID }}
           KMS_CLIENT_SECRET: ${{ secrets.KMS_CLIENT_SECRET }}
         run: |
-          # Only the KMS machine identity lives as a forge secret; a raw
+          # Only the KMS machine identity lives as a Hanzo Git secret; a raw
           # NPM_TOKEN beside it would be a second place to hold one thing —
           # and the one that rots silently, since npm answers an unauthorised
           # publish with 404 on PUT, not 401.
