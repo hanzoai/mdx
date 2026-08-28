@@ -69,7 +69,7 @@
     "version": "changeset version && pnpm install --lockfile-only"
   },
   "dependencies": {
-    "@hanzo/mdx-runtime": "^1.6.1",
+    "@hanzo/mdx-runtime": "1.6.1",
     "@mdx-js/mdx": "^3.1.1",
     "@standard-schema/spec": "^1.1.0",
     "chokidar": "^5.0.0",
@@ -90,7 +90,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "^2.29.8",
-    "@hanzo/docs-core": "16.9.3",
+    "@hanzo/docs-core": "17.0.1",
     "@types/bun": "^1.3.4",
     "@types/js-yaml": "^4.0.9",
     "@types/mdast": "^4.0.4",
@@ -114,7 +114,7 @@
     "webpack": "^5.104.0"
   },
   "peerDependencies": {
-    "@hanzo/docs-core": "^16.9.0",
+    "@hanzo/docs-core": ">=17.0.1",
     "next": "^15.3.0 || ^16.0.0",
     "react": "*",
     "vite": "6.x.x || 7.x.x"
@@ -133,5 +133,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "packageManager": "pnpm@10.12.4"
+  "packageManager": "pnpm@11.24.0"
 }
