@@ -49,7 +49,7 @@ jobs:
     # Must name a label a runner actually advertises. A label nothing offers
     # does not fail — it queues until the 24h timeout, which reads as silence
     # rather than as an error.
-    runs-on: hanzo-build-linux-amd64
+    runs-on: [hanzo-build-linux-amd64]
     env:
       # One variable covers install, publish and the read-back, so a runner-level
       # .npmrc pointing at the fleet mirror cannot send the publish somewhere the
