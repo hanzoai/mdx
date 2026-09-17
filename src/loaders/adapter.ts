@@ -2,11 +2,8 @@ import type { CompilerOptions } from '@/loaders/mdx/build-mdx';
 import type { LoadFnOutput, LoadHook } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs/promises';
-import type {
-  SourceMapInput,
-  TransformPluginContext,
-  TransformResult,
-} from 'rollup';
+import type { SourceMapInput, TransformResult } from 'rollup';
+import type { Plugin } from 'vite';
 import { parse } from 'node:querystring';
 import { ValidationError } from '@/utils/validation';
 import path from 'node:path';
@@ -86,11 +83,20 @@ export function toNode(loader: Loader): LoadHook {
   };
 }
 
+/**
+ * Vite owns its transform context, and it changed hands with the bundler: 7 gave
+ * rollup's, 8 gives rolldown's. Reading it off `Plugin` keeps the adapter
+ * correct for whichever one the installed vite carries.
+ */
+type ViteTransformContext = ThisParameterType<
+  Extract<NonNullable<Plugin['transform']>, (...args: never[]) => unknown>
+>;
+
 export interface ViteLoader {
   filter: (id: string) => boolean;
 
   transform: (
-    this: TransformPluginContext,
+    this: ViteTransformContext,
     value: string,
     id: string,
   ) => Promise<TransformResult | null>;
